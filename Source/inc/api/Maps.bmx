@@ -6,17 +6,18 @@ Rem
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 16.08.03
+        Version: 16.08.19
 End Rem
 
 
-MKL_Version "LAURA II - Maps.bmx","16.08.03"
+MKL_Version "LAURA II - Maps.bmx","16.08.19"
 MKL_Lic     "LAURA II - Maps.bmx","Mozilla Public License 2.0"
 
 
 Type tLAURA2OBJECTLIST ' BLD: Object Maps.ObjectList\nThis feature allows you to browse through the objects of a map.<br>All features require that you use Maps.ObjectList.Start() (or semilar function) first or LAURA II will crash out with an error!<p>Only one listout can be active at a time, and (very important) when you load a new map, all data will be reset, so you'll need to start up a new queue.
 
 	Field MyList:TList 
+	Field MyArray:TKthuraObject[]
 	Field MyObject:TKthuraObject ' It is allowed to read out or even assign stuff directly to this variable, however, you must only do so if you know the core of Kthura well and thus know what you are doing.
 	Field Picked=-1
 	Field Chat=0 ' When set to any other value than 0, some function may output some debugging code on the console. In most cases you don't need that though, so you can better leave it to 0. (And that's why it's undocumented for BLD)
@@ -31,11 +32,12 @@ Type tLAURA2OBJECTLIST ' BLD: Object Maps.ObjectList\nThis feature allows you to
 			If O.kind = kind ListAddLast mylist, O
 			Next
 		EndIf
+		MyArray = TKthuraObject[](ListToArray(MyList))
 	Return CountList(mylist)
 	End Method
 	
 	Method GotList() ' BLD: Returns 1 if there is a list. Returns 0 otherwise
-	Return Mylist<>Null
+	Return MyArray<>Null
 	End Method
 	
 	Method GotPick() ' BLD: Returns 1 if a pick was done. returns 0 otherwise
@@ -49,8 +51,12 @@ Type tLAURA2OBJECTLIST ' BLD: Object Maps.ObjectList\nThis feature allows you to
 	Method Pick(idx) ' BLD: Pick an object within the list. You must do this before trying to read out any objects. If you index a negative value this function will just flush the last pick.
 	If Not MyList GALE_Error "Cannot pick an object when nothing has been listed"
 	Picked=idx
+	Rem
 	If idx>CountList(mylist) GALE_Error "Picked index exceeds maximum ("+idx+">"+CountList(mylist)
 	If idx>=0 MyObject = TKthuraObject(MyList.ValueAtIndex(idx)) Else MyObject=Null
+	End Rem
+	If idx>Len(myarray) GALE_Error "Picked index exceeds maximum ("+idx+">"+Len(myArray)
+	If idx>=0 MyObject = MyArray[idx] Else myobject=Null
 	If Not MyObject GALE_Error "Invalid object picked ("+idx+")"
 	End Method
 	

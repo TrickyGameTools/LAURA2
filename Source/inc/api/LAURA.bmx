@@ -20,7 +20,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.05.14
+Version: 16.08.11
 End Rem
 Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of LAURA
 
@@ -66,7 +66,7 @@ Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of
 	Return DevConsoleInput$()
 	End Method
 	
-	Method ToggleFullScreen() ' BLD: Toggle between full screen and windowed mode
+	Method ToggleFullScreen() ' BLD: Toggle between full screen and windowed mode<br><span style='color:#ff0000'>WARNING!</span> This feature can (when used often) make the game inevitably crash, so I recommend against implementing it unless you have VERY good reasons to do so anyway.
 	graphicsfullscreen = Not graphicsfullscreen
 	InitGraphics id,GraphicsFullScreen
 	End Method
