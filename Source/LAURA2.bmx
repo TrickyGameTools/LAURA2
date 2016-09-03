@@ -168,6 +168,8 @@ Import  "-ldl"
 Import  "-lfontconfig"
 ?
 
+' GameJolt
+Import      "GameJolt/GameJolt.bmx" ' Turn this line into a comment to compile, as the file required here is close-sourced in order not to compromise GameJolt's security!
 
 ' This line has been put in by recommendation from skidracer to prevent calls to an outdated audio unit.
 'SetAudioDriver "OpenAL"

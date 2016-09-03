@@ -4,7 +4,7 @@ Rem
 	
 	
 	
-	(c) Jeroen P. Broks, 2015, All rights reserved
+	(c) Jeroen P. Broks, 2015, 2016, All rights reserved
 	
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 15.11.08
+Version: 16.09.03
 End Rem
-MKL_Version "LAURA II - init.bmx","15.11.08"
+MKL_Version "LAURA II - init.bmx","16.09.03"
 MKL_Lic     "LAURA II - init.bmx","GNU General Public License 3"
 
 Function Init()
@@ -117,12 +117,20 @@ Function InitGraphics(i:TID,fullscreen)
 Local s$[]
 EndGraphics
 Delay 500
-If i.get("Screen")
+Local asm$[]
+Local forcebit=-1
+If i.get("AllowScreenOverride") And startup.c("altscreenmode")
+	asm = startup.c("altscreenmode").split(",")
+	If Len(asm)<3 error "Start Up file's requested screen mode not properly defined!"
+	screenwidth = asm[0].toint()
+	screenheight = asm[1].toint()
+	forcebit=asm[3].toint()
+ElseIf i.get("Screen")
 	s=i.get("Screen").split("x")
 	If Len(s)<>2 error "No valid screen data set up for this game"
+	screenwidth = s[0].toint()
+	screenheight = s[1].toint()
 	EndIf
-screenwidth = s[0].toint()
-screenheight = s[1].toint()
 Local bit[] = [32,24,16]
 Local cbit
 ?debug
@@ -130,9 +138,9 @@ If fullscreen And startup.c("Windowed").toUpper()<>"YES" fullscreen = Proceed("W
 If fullscreen=-1 Bye
 ?
 ConsoleWrite "Request to force Windowed mode is: "+ startup.c("Windowed")
-If fullscreen And startup.c("Windowed").toUpper()<>"YES"
+If fullscreen And startup.c("Windowed").toUpper()<>"YES" And forcebit>=0
 	For Local abit=EachIn bit
-		If GraphicsModeExists(screenwidth,screenheight,abit)
+		If GraphicsModeExists(screenwidth,screenheight,abit) And (forcebit<0 Or forcebit=abit)
 			cbit = abit
 			Print "Graphics mode: "+screenwidth+"x"+Screenheight+"; "+abit+"bit"
 			CurrentGraphicsMode = Graphics(screenwidth,screenheight,cbit)
@@ -141,7 +149,7 @@ If fullscreen And startup.c("Windowed").toUpper()<>"YES"
 			Return
 			EndIf
 		Next
-	Notify "You hardware appears to be unable to support "+screenwidth+"x"+ScreenHeight+" in full screen.~n~n~nIn stead LAURA II will run in windowed mode!"
+	Notify "Your hardware appears to be unable to support "+screenwidth+"x"+ScreenHeight+" in full screen.~n~n~nIn stead LAURA II will run in windowed mode!"
 	graphicsfullscreen = False
 	EndIf
 CurrentGraphicsMode = Graphics(screenwidth,screenheight,0)

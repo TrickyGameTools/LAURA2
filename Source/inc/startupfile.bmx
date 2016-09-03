@@ -4,7 +4,7 @@ Rem
 	
 	
 	
-	(c) Jeroen P. Broks, 2015, All rights reserved
+	(c) Jeroen P. Broks, 2015, 2016, All rights reserved
 	
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -20,7 +20,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 15.11.21
+Version: 16.09.03
 End Rem
 Incbin "Witch.png"
 
@@ -35,7 +35,7 @@ If Not startup error suf+" could not be found!~n~nMost LAURA II games come with 
 codename = startup.C("CodeName"); If Not codename Error "No CodeName for the game! Is the laucher data setup correctly?"
 AppTitle = Startup.C("Title")
 ov =  "LAURA II - Coded by Tricky~n"
-ov :+ "(c) Jeroen P. Broks 2015~n"
+ov :+ "(c) Jeroen P. Broks 2015-20~n"+Left(MKL_NewestVersion(),2)
 ov :+ "Released under the terms of the GNU General Public License version 3~n~n"
 ov :+ "Version: "+MKL_NewestVersion()+"~n~n"+MKL_GetAllversions()+"~n~n"
 Print ov
@@ -92,5 +92,5 @@ VarDef("$LANG",L)
 End Function
 
 
-MKL_Version "LAURA II - startupfile.bmx","15.11.21"
+MKL_Version "LAURA II - startupfile.bmx","16.09.03"
 MKL_Lic     "LAURA II - startupfile.bmx","GNU General Public License 3"
