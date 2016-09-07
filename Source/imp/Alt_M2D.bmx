@@ -6,7 +6,7 @@ Rem
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 16.08.23
+        Version: 16.09.07
 End Rem
 Strict
 Rem
@@ -60,7 +60,7 @@ Global ErrorClosureMessage$
 
 
 ' Versions
-MKL_Version "LAURA II - Alt_M2D.bmx","16.08.23"
+MKL_Version "LAURA II - Alt_M2D.bmx","16.09.07"
 MKL_Lic     "LAURA II - Alt_M2D.bmx","Mozilla Public License 2.0"
 
 
@@ -120,7 +120,8 @@ Type GALEMainCon2 Extends GALE_DebugConsole 'GALE_DebugConsole
 		ConsoleWrite line,255,180,0
 		Next
 	GALEConsoleWrite cont[gotlog],255,0,255
-	Graphics 800,600,0
+	'Graphics 800,600,0
+	Rewindow
 	FlushKeys
 	Cls
 	ConsoleShow
