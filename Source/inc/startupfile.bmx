@@ -20,7 +20,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.09.03
+Version: 16.09.04
 End Rem
 Incbin "Witch.png"
 
@@ -31,6 +31,7 @@ Local ov$
 Local codename$
 'startup = LoadIni(suf) ' -- deprecated
 LoadIni suf,startup ' -- current
+AppFile = "LAURA II"
 If Not startup error suf+" could not be found!~n~nMost LAURA II games come with a launcher. Make sure you run the game through that launcher and not by directly calling LAURA II"
 codename = startup.C("CodeName"); If Not codename Error "No CodeName for the game! Is the laucher data setup correctly?"
 AppTitle = Startup.C("Title")
@@ -92,5 +93,5 @@ VarDef("$LANG",L)
 End Function
 
 
-MKL_Version "LAURA II - startupfile.bmx","16.09.03"
+MKL_Version "LAURA II - startupfile.bmx","16.09.04"
 MKL_Lic     "LAURA II - startupfile.bmx","GNU General Public License 3"

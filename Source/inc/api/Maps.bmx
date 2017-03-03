@@ -1,16 +1,16 @@
 Rem
         Maps.bmx
-	(c) 2015, 2016 Jeroen Petrus Broks.
+	(c) 2015, 2016, 2017 Jeroen Petrus Broks.
 	
 	This Source Code Form is subject to the terms of the 
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 16.08.19
+        Version: 17.03.03
 End Rem
 
 
-MKL_Version "LAURA II - Maps.bmx","16.08.19"
+MKL_Version "LAURA II - Maps.bmx","17.03.03"
 MKL_Lic     "LAURA II - Maps.bmx","Mozilla Public License 2.0"
 
 
@@ -118,14 +118,14 @@ Type TLAURAMAPOBJECT ' BLD: Object Maps.Obj\n
 	Return A
 	End Method
 	
-	Method CreateObject:TKthuraObject(Kind$,Tag$) ' BLD: Allows you to create an object and add it to Kthura. The Kind value can currently contain "TiledArea", "Obstacle", "Zone", "Exit" or any string prefixed with an asterisk (*). Don't ever use the kind "Actor" for this, as you'll be very likely to blow up your game.<p>This routine is a pretty powerful tool, and if you do not now the depths of the Kthura map engine, you may consider NOT to use it. The created object is returned so if you directly assign the returned object to a variable you don't have to do that afterward with Maps.Obj.Obj().<p>'Permanent' is not supported for this routine, as it only creates a new object without any values set. If you want to make the created object permanent you will have to set all settings of the object first and "seal" it with the Maps.Obj.Seal() method. <p>If you are not well versed in Kthura, you can best create an object in Kthura that way that players can't see it in the game and make it visible for the player when you need it, in stead of using this function. ;)
+	Method CreateObject:TKthuraObject(Kind$,Tag$,Remap=0) ' BLD: Allows you to create an object and add it to Kthura. The Kind value can currently contain "TiledArea", "Obstacle", "Zone", "Exit" or any string prefixed with an asterisk (*). Don't ever use the kind "Actor" for this, as you'll be very likely to blow up your game.<p>This routine is a pretty powerful tool, and if you do not now the depths of the Kthura map engine, you may consider NOT to use it. The created object is returned so if you directly assign the returned object to a variable you don't have to do that afterward with Maps.Obj.Obj().<p>'Permanent' is not supported for this routine, as it only creates a new object without any values set. If you want to make the created object permanent you will have to set all settings of the object first and "seal" it with the Maps.Obj.Seal() method. <p>If you are not well versed in Kthura, you can best create an object in Kthura that way that players can't see it in the game and make it visible for the player when you need it, in stead of using this function. ;)
 	Local ETag$ = "Maps.Obj.Create(~q"+Kind+"~q,~q"+Tag+"~q): "
 	If tag And MapContains(map.tagmap,tag) Then KthuraWarning "Maps.Obj.Create(~q"+Kind+"~q,~q"+Tag+"~q): Tag already exists! Request ignored" Return 
 	If kind = "Actor" Then KthuraError ETag+"Actors cannot be created this way!"
 	Local ret:TKthuraObject = map.createobject()
 	ret.Kind = Kind
 	ret.Tag = Tag
-	Map.TotalRemap
+	If Remap Map.TotalRemap
 	Return ret
 	End Method
 	
@@ -218,6 +218,8 @@ Type TLAURA2MAPS ' BLD: Object Maps\nContains the map features, LAURA II provide
 	
 	Field CObj:TKthuraObject ' BLD: In the case of a function being called by the 'custom object' drawer, the concerned object is stored in this variable. In all other cases it's empty and should not be used. This is only for advanced users who do know the integrity of Kthura.
 	Field CObjCrash = 1 ' BLD: If set 1 (default value) the LAURA II will crash with an error message if a custom object is not properly defined.
+	
+	Method Kthura:TKthura() Return map End Method' This feature is not documented, because it allows DIRECT access to everything a Kthura map offers, and should therefore ONLY be used by people who KNOW what they are doing!
 
 
 	Method Load(Mapname$,LayerName$="") ' BLD: Loads a map into the memory.<p>If a a file named script.lua is present in the Kthura map folder it will be loaded under scripttag "MAP", if not the system will see if a file named <mapname>.lua is present in the Script/Maps/ folder and load it under scripttag "MAP". If both do not exist an empty script file will be loaded in stead.<p>The "LayerName" parameter only has value in Multi-Map and may then be used to select which layer you initially want to use. If the requested map is not a multi-map this parameter will be ignored.
@@ -269,9 +271,10 @@ Type TLAURA2MAPS ' BLD: Object Maps\nContains the map features, LAURA II provide
 			DebugLog "LoadMap: Gone to Layer: "+LayerName
 		Else
 			For Local m$ = EachIn MapKeys(map.multi)
-				If map = map.getmultilayer(m) LayerCodeName = LayerName
+				'If map = map.getmultilayer(m) 
+				LayerCodeName = m 'LayerName
 				Next
-			DebugLog "LoadMap: Detected to be on Layer: "+LayerName
+			'DebugLog "LoadMap: Detected to be on Layer: "+LayerName
 			EndIf
 		EndIf
 	End Method
@@ -289,6 +292,7 @@ Type TLAURA2MAPS ' BLD: Object Maps\nContains the map features, LAURA II provide
 	Method GotoLayer(Layer$) ' BLD: Goes to the requested layer. (This only works on a multi-map. When used on a non-multi-map, this will throw an error)
 	If Not map GALE_Error("Cannot go to a multi-map layer if no map is loaded at all")
 	If Not map.multi GALE_Error("Cannot go to any layer. Loaded map is not a multi-map")
+	If Not layer Return
 	map = map.getmultilayer(Layer)
 	LayerCodeName = Layer
 	End Method

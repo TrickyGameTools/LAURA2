@@ -20,9 +20,9 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.09.03
+Version: 16.09.07
 End Rem
-MKL_Version "LAURA II - init.bmx","16.09.03"
+MKL_Version "LAURA II - init.bmx","16.09.07"
 MKL_Lic     "LAURA II - init.bmx","GNU General Public License 3"
 
 Function Init()
@@ -78,6 +78,7 @@ If DevVersion
 End Function
 
 Function InitConsoleText()
+Print "Setting up console"
 ConsoleWrite "LAURA II - Coded by Tricky~n"
 ConsoleWrite "(c) Jeroen P. Broks 2015~n"
 ConsoleWrite "Released under the terms of the GNU General Public License version 3~n~n"
@@ -100,6 +101,7 @@ O = LoadGame(F$,O)
 End Function
 
 Function InitID()
+Print "Identify"
 id = LoadID(JCR,"ID/Identify")
 If Not id error "Game has no identify data"
 If id.get("Engine")<>"LAURA2" And id.get("Engine")<>"LAURA II" error "This game was meant for the "+id.get("Engine")+" engine and not for LAURA II"
@@ -114,17 +116,19 @@ If id.get("Dev")="Yes"
 End Function
 
 Function InitGraphics(i:TID,fullscreen)
+Print "Setting up graphics mode"
 Local s$[]
 EndGraphics
 Delay 500
 Local asm$[]
 Local forcebit=-1
-If i.get("AllowScreenOverride") And startup.c("altscreenmode")
+If i.get("AllowScreenOverride").toupper()="YES" And startup.c("altscreenmode")
 	asm = startup.c("altscreenmode").split(",")
 	If Len(asm)<3 error "Start Up file's requested screen mode not properly defined!"
 	screenwidth = asm[0].toint()
 	screenheight = asm[1].toint()
-	forcebit=asm[3].toint()
+	forcebit=asm[2].toint()
+	Print "Requested mode: "+ScreenWidth+"x"+Screenheight+", "+forcebit+" bits"
 ElseIf i.get("Screen")
 	s=i.get("Screen").split("x")
 	If Len(s)<>2 error "No valid screen data set up for this game"
@@ -137,12 +141,15 @@ Local cbit
 If fullscreen And startup.c("Windowed").toUpper()<>"YES" fullscreen = Proceed("We're running in debug mode.~n~nDo you want fullscreen?")
 If fullscreen=-1 Bye
 ?
-ConsoleWrite "Request to force Windowed mode is: "+ startup.c("Windowed")
+'ConsoleWrite "Request to force Windowed mode is: "+ startup.c("Windowed")
+Print "forcebit = "+forcebit
+If forcebit=0 fullscreen=False
 If fullscreen And startup.c("Windowed").toUpper()<>"YES" And forcebit>=0
 	For Local abit=EachIn bit
-		If GraphicsModeExists(screenwidth,screenheight,abit) And (forcebit<0 Or forcebit=abit)
+		If (GraphicsModeExists(screenwidth,screenheight,abit) And (forcebit<1 Or forcebit=abit))
 			cbit = abit
-			Print "Graphics mode: "+screenwidth+"x"+Screenheight+"; "+abit+"bit"
+			If forcebit>=0 cbit=forcebit
+			Print "Graphics mode: "+screenwidth+"x"+Screenheight+"; "+abit+"bit ("+cbit+")"
 			CurrentGraphicsMode = Graphics(screenwidth,screenheight,cbit)
 			SetBlend alphablend
 			Kthura_GrabBoundaries	
@@ -161,6 +168,7 @@ If Upper(i.Get("OSMousePointer"))="NO" Or Upper(i.Get("OSMousePointer"))="OFF"
 	DebugLog "OS Mouse Pointer has been turned off"
 	EndIf
 Kthura_GrabBoundaries	 ' Let's see if this solves some evil
+Print "Graphics All Done"
 End Function	
 
 Function InitScript()
@@ -196,6 +204,7 @@ AddByeFunction MacReturn ' Only has effect on Mac. Other platforms will ignore t
 End Function
 
 Function InitPlatformScript()
+Print "Platform specific settings: "+platform_OS+"."+Platform_CPU
 Local s$ = Platform_OS+"."+Platform_CPU
 Local F$ = "Script/OSBOOT/"+s+".lua"
 If Not JCR_Exists(JCR,f)
@@ -209,5 +218,6 @@ If Not JCR_Exists(JCR,f)
 	End
 	EndIf
 GALE_LoadScript(JCR,f)
+Print "Done"
 End Function
 	

@@ -20,7 +20,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.07.09
+Version: 16.09.12
 End Rem
 
 Function GetActorSaveDump$(SMap:TKthura)
@@ -114,6 +114,8 @@ If FileType(Swapdir)
 BT.Close "zlib"
 Delay 50
 SecuFile SaveDir+"/"+file
+' remove savemeta
+If Not DeleteDir(swapdir+"/SaveMeta",1) ConsoleWrite "WARNING!!! SaveMeta not properly deleted!",255,100,0	
 ConsoleWrite "Saving Complete",255,95,10
 End Function
 
@@ -234,7 +236,7 @@ If Map.Multi permafile = SwapDir+"/Perma-Map/"+laura2maps.CodeName+"/"+Laura2map
 If FileType(permafile)
 	'GALE_LoadScript Raw2JCR(permafile,StripDir(permafile),StripDir(permafile)
 	ConsoleWrite("Skip this round. I think it's not needed")
-	EndIf	
+	EndIf		
 ' -- / Is this needed?	
 ' Network data
 LoadNet BD,startup						
@@ -246,5 +248,7 @@ Print "Original = "+Original
 If DeleteWhenLoaded 
 	If Not DeleteFile(file) GALE_Error "Deletion Error",["1,This file had to be deleted after loading","2,however either it's been tampered with","3,somehow or there are some filesystem","4,errors but the deletion failed.","5,","6,In order not to enable cheating","7,the system's gonna crash out!","8,Bye!"]
 	EndIf
+' remove savemeta
+If Not DeleteDir(swapdir+"/SaveMeta",1) ConsoleWrite "WARNING!!! SaveMeta not properly deleted!",255,100,0	
 Return Original
 End Function

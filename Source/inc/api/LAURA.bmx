@@ -20,8 +20,12 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.08.11
+Version: 16.09.14
 End Rem
+
+MKL_Version "LAURA II - LAURA.bmx","16.09.14"
+MKL_Lic     "LAURA II - LAURA.bmx","GNU General Public License 3"
+
 Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of LAURA
 
 
@@ -44,6 +48,20 @@ Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of
 	
 	Method Save(File$,DeleteOnLoad=0) ' BLD: Saves the game to "File". If "DeleteOnLoad" is set to any value other than 0 the savegame will be deleted after it's loaded. If the value is set to 0 the savegame will stay.
 	SaveGame File,DeleteOnLoad
+	End Method
+	
+	Method StringForSave(file$,str$) ' BLD: You can save a string in the swap folder, which can serve as extra meta data for your savegame  otherwise wouldn't cover. Pathnames are ignored and the file is deleted as soon the savegame has been created to prevent conflicts with later save game files.	
+		If Not CreateDir(swapdir+"/SaveMeta",1) GALE_Error "Cannot create "+swapdir+"/SaveMeta"
+		SaveString str,swapdir+"/SaveMeta/"+StripDir(file)
+	End Method
+	
+	Method ImageForSave(file$,tag$,frame=0) ' BLD: Allows you to save an image (as PNG) in the swap folderwhich can serve as extra meta data for your savegame otherwise wouldn't cover. Pathnames are ignored and the file is deleted as soon the savegame has been created to prevent conflicts with later save game files.	
+		If Not CreateDir(swapdir+"/SaveMeta",1) GALE_Error "Cannot create "+swapdir+"/SaveMeta"
+		If Lower(ExtractExt(file)<>".png") file:+".png"
+		Local I:TImage = TImage(MapValueForKey(MJBC_Lua_Image,Upper(tag)))
+		If Not I GALE_Error "ImageForSave(~q"+file+"~q,~q"+tag+"~q,"+frame+"): No image available on that tag!"
+		If frame>Len(I.Pixmaps) GALE_Error("ImageForSave(~q"+file+"~q,~q"+tag+"~q,"+frame+"): Frame beyond number of frames ("+Len(I.Pixmaps)+")")
+		SavePixmapPNG I.PixMaps[frame],swapdir+"/SaveMeta/"+StripDir(file),9
 	End Method	
 	
 	Method User$() ' BLD: Returns the username if one is given<br>This does not refer to a network name, just a justname used in LAURA II itself.
@@ -52,6 +70,10 @@ Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of
 	
 	Method LauraStartUp$(v$) ' Undocumented.
 	Return startup.c(v)
+	End Method
+	
+	Method Version$() ' BLD: Returns current LAURA II version
+		Return MKL_NewestVersion()
 	End Method
 	
 	Method GetSaveDir$() ' BLD: Returns the full path name of the directory where the savegames are being stored.
@@ -88,7 +110,36 @@ Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of
 		EndIf
 	Return s
 	End Method
-
+	
+	Method StringFromSave$(file$,entry$) ' BLD: Reads an entry from a savegame file and return its contents as a string
+	 file$ = Savedir+"/"+file
+	If Not JCR_Exists(file,entry)
+		ConsoleWrite "Warning! StringFromSave(~q"+file+"~q,~q"+entry+"~q): File or entry not found!"
+		Return
+	EndIf
+	Return LoadString(JCR_B(file,entry))
+	End Method
+	
+	Method ImageFromSave$(file$,Entry$,ID$="") ' BLD: Reads an image from a savegame
+		file$ = Savedir+"/"+file
+		If Not ID
+			Repeat
+				ID = Upper(Hex(Rand(0,MilliSecs())))
+			Until Not MapContains(MJBC_Lua_Image,ID)
+		EndIf
+		If Not jcr_exists(file,entry)
+			ConsoleWrite "Warning! StringFromSave(~q"+file+"~q,~q"+entry+"~q,~q"+ID+"~q): File or entry not found!"
+			Return
+		EndIf
+		Local I:TImage = LoadImage(JCR_B(file,entry))
+		If Not I 
+			ConsoleWrite "Warning! StringFromSave(~q"+file+"~q,~q"+entry+"~q,~q"+ID+"~q): Image not properly read!" 
+			Return
+		EndIf
+		MapInsert MJBC_Lua_Image,Upper(ID),i
+		Return ID	
+	End Method
+	
 	End Type
 
 Global LAURA_API:TLAURA_API = New TLAURA_API

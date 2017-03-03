@@ -4,7 +4,7 @@ Rem
 	
 	
 	
-	(c) Jeroen P. Broks, 2015, 2016, All rights reserved
+	(c) Jeroen P. Broks, 2015, 2016, 2017, All rights reserved
 	
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -20,10 +20,9 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.07.30
+Version: 17.03.03
 End Rem
 Strict
-
 
 Rem
 One thing to point out.
@@ -133,6 +132,7 @@ Import	tricky_kthura.kthura_draw
 Import	jcr6.zlibdriver
 Import	jcr6.quakepak ' Yes, I decided to support the Quake Pack files as well, in case you prefer that above JCR6. Please note that Quake Pack files are less sophisticated than JCR6 files, this can influence the support. Keep that in mind!
 Import  jcr6.tar4jcr6 ' You can also use TAR. Compressed TAR files are not supported, nor are there any plans for that in the future (the way JCR6 has been set up makes this impossible).
+Import  jcr6.jcr6zipstream ' Yeah, this makes the use of zip possible, BUT, the zip files must be "indexed" for the usage of JCR6
 
 ' JCR6 raw file support, needed for some internal scripts. (and the temp scripts)
 Import	jcr6.fileasjcr
@@ -179,7 +179,7 @@ GaleCon = New GALEMainCon2
 
 ' Version
 MKL_Lic     "LAURA II - LAURA2.bmx","GNU General Public License 3"
-MKL_Version "LAURA II - LAURA2.bmx","16.07.30"
+MKL_Version "LAURA II - LAURA2.bmx","17.03.03"
 
 ?Debug
 GJDebug=True
