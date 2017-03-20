@@ -4,7 +4,7 @@ Rem
 	
 	
 	
-	(c) Jeroen P. Broks, 2015, 2016, All rights reserved
+	(c) Jeroen P. Broks, 2015, 2016, 2017, All rights reserved
 	
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -20,10 +20,10 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.09.14
+Version: 17.03.20
 End Rem
 
-MKL_Version "LAURA II - LAURA.bmx","16.09.14"
+MKL_Version "LAURA II - LAURA.bmx","17.03.20"
 MKL_Lic     "LAURA II - LAURA.bmx","GNU General Public License 3"
 
 Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of LAURA
@@ -96,6 +96,8 @@ Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of
 	Method TerminateBye() ' BLD: If called, the system will check if in the last INP.Grab or start of a cycle a request to close the application was detected. If so, LAURA II will ask for confirmation and if the user confirms LAURA II will terminate itself immediately.<br>Due to safety measures, this function will be ignored when in fullscreen (in which a termination call should be impossible to make anyway).
 	If (Not graphicsfullscreen) And GALE_INP.Terminate 
 		If Confirm("Are you sure you wish to quit ~q"+AppTitle+"~q immediately?~n~n(Any unsaved progress will be lost)") GALE_Sys.Bye
+	ElseIf GALE_INP.Terminate
+		ConsoleWrite "WARNING! Terminate call received, but we're not in full screen",255,60,0	
 		EndIf
 	End Method
 	
@@ -127,7 +129,7 @@ Type TLAURA_API ' BLD: Object LAURA\nThis object contains a few core features of
 				ID = Upper(Hex(Rand(0,MilliSecs())))
 			Until Not MapContains(MJBC_Lua_Image,ID)
 		EndIf
-		If Not jcr_exists(file,entry)
+		If Not JCR_Exists(file,entry)
 			ConsoleWrite "Warning! StringFromSave(~q"+file+"~q,~q"+entry+"~q,~q"+ID+"~q): File or entry not found!"
 			Return
 		EndIf

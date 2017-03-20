@@ -4,7 +4,7 @@ Rem
 	
 	
 	
-	(c) Jeroen P. Broks, 2015, 2016, All rights reserved
+	(c) Jeroen P. Broks, 2015, 2016, 2017, All rights reserved
 	
 		This program is free software: you can redistribute it and/or modify
 		it under the terms of the GNU General Public License as published by
@@ -20,9 +20,9 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 16.09.07
+Version: 17.03.20
 End Rem
-MKL_Version "LAURA II - init.bmx","16.09.07"
+MKL_Version "LAURA II - init.bmx","17.03.20"
 MKL_Lic     "LAURA II - init.bmx","GNU General Public License 3"
 
 Function Init()
@@ -159,7 +159,7 @@ If fullscreen And startup.c("Windowed").toUpper()<>"YES" And forcebit>=0
 	Notify "Your hardware appears to be unable to support "+screenwidth+"x"+ScreenHeight+" in full screen.~n~n~nIn stead LAURA II will run in windowed mode!"
 	graphicsfullscreen = False
 	EndIf
-CurrentGraphicsMode = Graphics(screenwidth,screenheight,0)
+CurrentGraphicsMode = Graphics(screenwidth,screenheight,0); graphicsfullscreen = False
 SetBlend alphablend
 DebugLog "OSMousePointer = "+i.Get("OSMousePointer")
 Delay 1000
