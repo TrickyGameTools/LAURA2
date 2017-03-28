@@ -20,7 +20,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 17.03.03
+Version: 17.03.28
 End Rem
 Strict
 
@@ -124,6 +124,7 @@ Import	gale.luaaudio
 Import	gale.Time
 Import	gale.luablopplasma
 Import	gale.dirgetter
+Import  gale.gini
 
 ' Import the KThura map engine
 Import	tricky_kthura.kthura_draw
@@ -179,7 +180,7 @@ GaleCon = New GALEMainCon2
 
 ' Version
 MKL_Lic     "LAURA II - LAURA2.bmx","GNU General Public License 3"
-MKL_Version "LAURA II - LAURA2.bmx","17.03.03"
+MKL_Version "LAURA II - LAURA2.bmx","17.03.28"
 
 ?Debug
 GJDebug=True
