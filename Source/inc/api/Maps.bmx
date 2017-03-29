@@ -6,11 +6,11 @@ Rem
 	Mozilla Public License, v. 2.0. If a copy of the MPL was not 
 	distributed with this file, You can obtain one at 
 	http://mozilla.org/MPL/2.0/.
-        Version: 17.03.03
+        Version: 17.03.29
 End Rem
 
 
-MKL_Version "LAURA II - Maps.bmx","17.03.03"
+MKL_Version "LAURA II - Maps.bmx","17.03.29"
 MKL_Lic     "LAURA II - Maps.bmx","Mozilla Public License 2.0"
 
 
@@ -97,9 +97,37 @@ Type tLAURA2OBJECTLIST ' BLD: Object Maps.ObjectList\nThis feature allows you to
 		For Local L$=EachIn ret.split("~n") ConsoleWrite L Next
 		EndIf
 	Return ret
-	End Method	
+	End Method
 	
-	End Type
+	Method LabelList(Label$) ' BLD: List the objects by label. In a certain sense this function does the same as the start function, only then for labels.
+		If Not map GALE_Error "Tried to list out a map, while no map is loaded!"
+		mylist = map.labelmap.list(label,0)
+		If Not mylist 
+			mylist = New TList
+			ConsoleWrite "WARNING! There are no objects with label "+label,255,60,0			
+		EndIf
+		MyArray = TKthuraObject[](ListToArray(MyList))	
+		Return Len MyArray
+	End Method
+	
+	Method KillByLabel(Label$,permanent=0) ' BLD: Remove all objects with a certain label. <br>Please note that this function does not remap prior or after the removal, so if you don't do that yourself, this function can malfunction.
+		If Not map GALE_Error "Tried to list out a map, while no map is loaded!"
+		Local templist:TList = map.labelmap.list(label,0)
+		If Not Templist	
+			ConsoleWrite "WARNING! There are no objects with label "+label,255,60,0
+			Return
+		EndIf
+		ConsoleWrite "Request done to remove all objects labeled: "+label
+		Local dc = 0
+		For Local o:TKthuraObject = EachIn templist
+			ListRemove map.fullobjectlist,o
+			dc:+1
+		Next
+		If dc=1 ConsoleWrite "  1 object removed" Else ConsoleWrite "  "+dc+" objects removed"
+		If permanent LAURA2MAPS.PermaWrite("~tMaps.ObjectList.KillByLabel(~q"+Label+"~q)")	
+	End Method
+			
+	End Type	
 	
 Type TLAURAMAPOBJECT ' BLD: Object Maps.Obj\n
 

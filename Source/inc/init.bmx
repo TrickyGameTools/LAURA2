@@ -20,9 +20,9 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 17.03.20
+Version: 17.03.29
 End Rem
-MKL_Version "LAURA II - init.bmx","17.03.20"
+MKL_Version "LAURA II - init.bmx","17.03.29"
 MKL_Lic     "LAURA II - init.bmx","GNU General Public License 3"
 
 Function Init()
@@ -113,6 +113,19 @@ If id.get("Dev")="Yes"
 	sessionlogfile = ExtractDir(SessionFile)+"/Session Log.html"
 	ConsoleWriteLogFile(SessionLogFile$)
 	EndIf
+Local cvs$ = MKL_NewestVersion()
+Local cv = Replace(cvs,".","").toint()
+Local rq = Replace(id.Get("REQLAURA2"),".","").toint()
+If cv<rq Then
+	ConsoleWrite "I'm very sorry, but this version of LAURA II is too outdated for this game."
+	ConsoleWrite "Version "+rq+" or later is required, and this is version "+cv
+	ConsoleWrite ""
+	ConsoleWrite "Hit any key to end LAURA II"
+	ConsoleShow
+	Flip
+	WaitKey
+	End
+EndIf	
 End Function
 
 Function InitGraphics(i:TID,fullscreen)
