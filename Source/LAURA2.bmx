@@ -20,7 +20,7 @@ Rem
 		
 	Exceptions to the standard GNU license are available with Jeroen's written permission given prior 
 	to the project the exceptions are needed for.
-Version: 17.03.28
+Version: 17.06.19
 End Rem
 Strict
 
@@ -124,7 +124,7 @@ Import	gale.luaaudio
 Import	gale.Time
 Import	gale.luablopplasma
 Import	gale.dirgetter
-Import  gale.gini
+Import  gale.ginimodlua
 
 ' Import the KThura map engine
 Import	tricky_kthura.kthura_draw
@@ -139,7 +139,7 @@ Import  jcr6.jcr6zipstream ' Yeah, this makes the use of zip possible, BUT, the 
 Import	jcr6.fileasjcr
 
 ' Import some general units by tricky
-Import	tricky_units.initfile2
+Import	tricky_units.gini 'initfile2
 Import	tricky_units.identify
 Import	tricky_units.Dirry ' Please note that the inclusion of this module requires to have the bah.volumes module by Brucey to be installed as well.
 Import	tricky_units.Bye
@@ -180,7 +180,7 @@ GaleCon = New GALEMainCon2
 
 ' Version
 MKL_Lic     "LAURA II - LAURA2.bmx","GNU General Public License 3"
-MKL_Version "LAURA II - LAURA2.bmx","17.03.28"
+MKL_Version "LAURA II - LAURA2.bmx","17.06.19"
 
 ?Debug
 GJDebug=True
