@@ -16,4 +16,4 @@ This being said it *is* possible to create games with LAURA II not using the GNU
 Games created with LAURA II:
 - [Star Story](http://github.com/PhantasarProductions/Star-Story)
 - [The Fairy Tale REVAMPED](http://github.com/PhantasarProductions/TFTREVAMP)
-- [Moerker](http://github.com/PhantasarProductions/Morker) (In preparation)
+
