@@ -17,3 +17,7 @@ Games created with LAURA II:
 - [Star Story](http://github.com/PhantasarProductions/Star-Story)
 - [The Fairy Tale REVAMPED](http://github.com/PhantasarProductions/TFTREVAMP)
 
+
+
+===
+LAURA II has been discontinued. The source code is available for those who see a use for it, and yes, you may fork this repository and continue the development and maintenance if you please, as long as you keep the terms of the GPL license are kept in order.
